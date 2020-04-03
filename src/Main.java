@@ -116,7 +116,8 @@ public class Main {
     private static void buildWorkforce() {
         for (Workplace workplace : workplaces) {
             for (Employee employee : employees) {
-                if (employee.employer == workplace.hashCode()) {
+                //No dealing with empty national id's, kama haiko, you is a ghost
+                if (employee.employer == workplace.hashCode() && employee.nationalId.length() > 0) {
                     workplace.addEmployee(employee);
                 }
             }
