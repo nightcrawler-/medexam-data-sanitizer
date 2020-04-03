@@ -1,3 +1,6 @@
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,6 +14,12 @@ public class Workplace {
     // employer_address,
     // employer_email,
     // employer_id,
+
+
+    //Include hard practitioner id for rails seed
+
+    @JsonProperty("practitioner_id")
+    public int practitionerId = 1;
 
     public String name, registration, location, phone, address, email, id;
 

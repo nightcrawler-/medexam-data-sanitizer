@@ -1,3 +1,10 @@
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 public class Employee {
@@ -10,30 +17,38 @@ public class Employee {
     // employee_id,
     // employee_employer,
 
-    public String name, dob, female, nationalId, pn, id;
-    public int employer;
+    public String name, gender, pn;
 
-    public String gender;
+    @JsonProperty("national_id")
+    public String nationalId;
+
+    @JsonIgnore
+    private String female, id, dateString;
+
+    @JsonIgnore
+    public int employer, age;
+
+    private Date dob;//value preferred from getter
 
     /**
-     *
      * @param name
-     * @param dob
+     * @param age
      * @param female
      * @param nationalId
      * @param pn
      * @param id
-     * @param employer use employer object hash for the time being, source data can't be trusted to have been strict
-     *                 with the associations
+     * @param employer   use employer object hash for the time being, source data can't be trusted to have been strict
+     *                   with the associations
      */
-    public Employee(String name, String dob, String female, String nationalId, String pn, String id, int employer) {
+    public Employee(String name, int age, String female, String nationalId, String pn, String id, int employer, String dateString) {
         this.name = name;
-        this.dob = dob;
+        this.age = age;
         this.female = female;
         this.nationalId = nationalId;
         this.pn = pn;
         this.id = id;
         this.employer = employer;
+        this.dateString = dateString;
     }
 
     public String getGender() {
@@ -42,6 +57,7 @@ public class Employee {
 
     /**
      * Too bad if no id number was used during the generation of initial data, that person is now a ghost
+     *
      * @param o
      * @return
      */
@@ -56,5 +72,32 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hash(nationalId);
+    }
+
+    /**
+     * Get the approximate DOB, based on age and when this was record
+     *
+     * @return
+     * @throws ParseException
+     */
+    public Date getDob() {
+
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = null;
+        try {
+            date = format.parse(dateString);
+        } catch (ParseException e) {
+            date = new Date();
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - age);
+
+        date.setTime(cal.getTimeInMillis());
+
+        this.dob = date;
+        return dob;
     }
 }

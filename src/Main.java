@@ -63,7 +63,7 @@ public class Main {
 
         for (CSVRecord record : records) {
             String eName = record.get("employee_name");
-            String eDob = record.get("employee_dob");
+            String eAge = record.get("employee_dob");
             String eFemale = record.get("employee_female");
             String eNationalId = record.get("employee_national_id");
             String ePn = record.get("employee_employment_number");
@@ -78,13 +78,23 @@ public class Main {
             String wEmail = record.get("employer_email");
             String wId = record.get("employer_id");
 
+            String sDate = record.get("session_date");
+
             Workplace workplace = new Workplace(wName, wReg, wLoc, wPhone, wAddress, wEmail, wId);
-            Employee employee = new Employee(eName, eDob, eFemale, eNationalId, ePn, eId, workplace.hashCode());
+            Employee employee = new Employee(eName, getAgeOrZero(eAge), eFemale, eNationalId, ePn, eId, workplace.hashCode(), sDate);
 
             //Add all work places, duplicates allowed, to workplaces arraylist
             workplaces.add(workplace);
             employees.add(employee);
+        }
+    }
 
+    private static int getAgeOrZero(String age) {
+
+        try {
+            return Integer.parseInt(age);
+        } catch (NumberFormatException ex) {
+            return 0;
         }
     }
 
@@ -124,4 +134,5 @@ public class Main {
         mapper.writeValue(new File("dump.json"), workplaces);
 
     }
+
 }
