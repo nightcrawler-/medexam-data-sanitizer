@@ -10,10 +10,10 @@ public class Employee {
     // employee_id,
     // employee_employer,
 
-    String name, dob, female, nationalId, pn, id;
-    int employer;
+    public String name, dob, female, nationalId, pn, id;
+    public int employer;
 
-    private String gender;
+    public String gender;
 
     /**
      *

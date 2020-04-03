@@ -12,9 +12,9 @@ public class Workplace {
     // employer_email,
     // employer_id,
 
-    String name, registration, location, phone, address, email, id;
+    public String name, registration, location, phone, address, email, id;
 
-    private List<Employee> employees = new ArrayList<>();
+    public List<Employee> employees = new ArrayList<>();
 
     public Workplace(String name, String registration, String location, String phone, String address, String email, String id) {
         this.name = name;

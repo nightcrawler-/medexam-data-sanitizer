@@ -1,6 +1,8 @@
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -12,6 +14,8 @@ public class Main {
     private static ArrayList<Workplace> workplaces = new ArrayList<>();
     private static ArrayList<Employee> employees = new ArrayList<>();
 
+    private static ObjectMapper mapper = new ObjectMapper();
+
     public static void main(String... args) {
         try {
             processRawFile("data_raw.csv");
@@ -19,6 +23,7 @@ public class Main {
             deDuplicateEmployees();
             buildWorkforce();
             result();
+            generateJson();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,9 +113,15 @@ public class Main {
         }
     }
 
-    private static void result(){
-        for(Workplace workplace: workplaces){
+    private static void result() {
+        for (Workplace workplace : workplaces) {
             System.out.println(workplace.name + ": " + workplace.getEmployees().size());
         }
+    }
+
+    private static void generateJson() throws IOException {
+        System.out.println(mapper.writeValueAsString(workplaces));
+        mapper.writeValue(new File("dump.json"), workplaces);
+
     }
 }
