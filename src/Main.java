@@ -10,10 +10,15 @@ import java.util.LinkedHashSet;
 public class Main {
 
     private static ArrayList<Workplace> workplaces = new ArrayList<>();
+    private static ArrayList<Employee> employees = new ArrayList<>();
 
     public static void main(String... args) {
         try {
             processRawFile("data_raw.csv");
+            deDuplicateWorkplaces();
+            deDuplicateEmployees();
+            buildWorkforce();
+            result();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,14 +74,13 @@ public class Main {
             String wId = record.get("employer_id");
 
             Workplace workplace = new Workplace(wName, wReg, wLoc, wPhone, wAddress, wEmail, wId);
-            Employee employee = new Employee(eName, eDob, eFemale, eNationalId, ePn, eId, eEmployer);
+            Employee employee = new Employee(eName, eDob, eFemale, eNationalId, ePn, eId, workplace.hashCode());
 
             //Add all work places, duplicates allowed, to workplaces arraylist
             workplaces.add(workplace);
+            employees.add(employee);
 
         }
-
-        deDuplicateWorkplaces();
     }
 
     private static void deDuplicateWorkplaces() {
@@ -84,5 +88,29 @@ public class Main {
         LinkedHashSet<Workplace> workplacesSet = new LinkedHashSet<>(workplaces);
         workplaces = new ArrayList<Workplace>(workplacesSet);
         System.out.println("###### Total Workplaces After De-Dup: " + workplaces.size());
+    }
+
+    private static void deDuplicateEmployees() {
+        System.out.println("###### Total Employees Before De-Dup: " + employees.size());
+        LinkedHashSet<Employee> employeesSet = new LinkedHashSet<>(employees);
+        employees = new ArrayList<Employee>(employeesSet);
+        System.out.println("###### Total Employees After De-Dup: " + employees.size());
+    }
+
+    //Generates the employees for each workplace, can it be more efficient?
+    private static void buildWorkforce() {
+        for (Workplace workplace : workplaces) {
+            for (Employee employee : employees) {
+                if (employee.employer == workplace.hashCode()) {
+                    workplace.addEmployee(employee);
+                }
+            }
+        }
+    }
+
+    private static void result(){
+        for(Workplace workplace: workplaces){
+            System.out.println(workplace.name + ": " + workplace.getEmployees().size());
+        }
     }
 }

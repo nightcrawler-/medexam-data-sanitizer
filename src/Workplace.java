@@ -28,6 +28,7 @@ public class Workplace {
 
     /**
      * In order to de-duplicate a list, this is required. The assumption is that the same name, location and regisitration imply the same object
+     *
      * @param o
      * @return
      */
@@ -46,9 +47,11 @@ public class Workplace {
         return Objects.hash(name, registration, location);
     }
 
-    //Should ignore duplicates
-    private void addEmployee(){
-//TODO: Fix
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
     }
 
+    public List<Employee> getEmployees() {
+        return employees;
+    }
 }
