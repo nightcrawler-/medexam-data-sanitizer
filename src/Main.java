@@ -131,7 +131,7 @@ public class Main {
 
     private static void generateJson() throws IOException {
         System.out.println(mapper.writeValueAsString(workplaces));
-        mapper.writeValue(new File("dump.json"), workplaces);
+        mapper.writeValue(new File("workplace-employees.json"), workplaces);
 
     }
 

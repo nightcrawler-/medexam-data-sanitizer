@@ -17,6 +17,9 @@ public class Employee {
     // employee_id,
     // employee_employer,
 
+    private static final String OUT_DATE_FORMAT = "yyyy-MM-dd";//2020-04-03
+    private static final String IN_DATE_FORMAT = "MM/dd/yyyy";//01/19/2019
+
     public String name, gender, pn;
 
     @JsonProperty("national_id")
@@ -28,7 +31,7 @@ public class Employee {
     @JsonIgnore
     public int employer, age;
 
-    private Date dob;//value preferred from getter
+    private String dob;//value preferred from getter
 
     /**
      * @param name
@@ -80,12 +83,12 @@ public class Employee {
      * @return
      * @throws ParseException
      */
-    public Date getDob() {
+    public String getDob() {
 
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat formatIn = new SimpleDateFormat(IN_DATE_FORMAT);
         Date date = null;
         try {
-            date = format.parse(dateString);
+            date = formatIn.parse(dateString);
         } catch (ParseException e) {
             date = new Date();
         }
@@ -97,7 +100,11 @@ public class Employee {
 
         date.setTime(cal.getTimeInMillis());
 
-        this.dob = date;
+        SimpleDateFormat formatOut = new SimpleDateFormat(OUT_DATE_FORMAT);
+
+
+        this.dob = formatOut.format(date);
+
         return dob;
     }
 }
